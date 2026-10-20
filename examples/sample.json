@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "title": "Workshop care calendar",
+  "events": [
+    {
+      "id": "filters",
+      "title": "Inspect air filters",
+      "resource": "Ventilation",
+      "date": "2026-10-05",
+      "duration": 1,
+      "repeat": "weekly",
+      "count": 8,
+      "note": "Fictional equipment schedule."
+    },
+    {
+      "id": "press",
+      "title": "Clean the paper press",
+      "resource": "Press A",
+      "date": "2026-10-13",
+      "duration": 2,
+      "repeat": "weekly",
+      "count": 4,
+      "note": "Reserve the work area."
+    },
+    {
+      "id": "bench",
+      "title": "Refinish work surface",
+      "resource": "Bench",
+      "date": "2026-10-22",
+      "duration": 3,
+      "repeat": "once",
+      "count": 1,
+      "note": "Allow drying time."
+    },
+    {
+      "id": "inspect",
+      "title": "Inspect press alignment",
+      "resource": "Press A",
+      "date": "2026-10-14",
+      "duration": 1,
+      "repeat": "once",
+      "count": 1,
+      "note": "Intentional conflict for review."
+    },
+    {
+      "id": "inventory",
+      "title": "Check storage condition",
+      "resource": "Storage",
+      "date": "2026-10-30",
+      "duration": 3,
+      "repeat": "once",
+      "count": 1,
+      "note": "Crosses a month boundary."
+    }
+  ]
+}
