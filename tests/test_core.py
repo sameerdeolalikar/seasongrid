@@ -48,4 +48,32 @@ class Tests(unittest.TestCase):
         d=self.fresh();d["events"][0].update(repeat="once",count=52)
         self.assertEqual(validate(d)["events"][0]["count"],1)
 
+    def test_optional_note_normalization(self):
+        for value in [None, "", "  Check alignment  "]:
+            with self.subTest(value=value):
+                d = self.fresh()
+                d["events"][0]["note"] = value
+                expected = "Check alignment" if value else "—"
+                self.assertEqual(validate(d)["events"][0]["note"], expected)
+        d = self.fresh()
+        d["events"][0].pop("note", None)
+        self.assertEqual(validate(d)["events"][0]["note"], "—")
+
+    def test_non_text_note_rejection_preserves_saved_document(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            store = Store(Path(tmp) / "library.sqlite3")
+            first = store.save({"revision": 0, "document": self.fresh()})
+            for value in [False, True, 0, 1, [], {}, ["Check alignment"]]:
+                with self.subTest(value=value):
+                    invalid = copy.deepcopy(first)
+                    invalid["document"]["events"][0]["note"] = value
+                    with self.assertRaisesRegex(ValueError, "Note"):
+                        store.save(invalid)
+                    self.assertEqual(store.get(first["id"]), first)
+            retry = copy.deepcopy(first)
+            retry["document"]["events"][0]["note"] = "Check alignment"
+            saved = store.save(retry)
+            self.assertEqual(saved["revision"], 2)
+            self.assertEqual(Store(store.path).get(first["id"]), saved)
+
 if __name__=="__main__":unittest.main()

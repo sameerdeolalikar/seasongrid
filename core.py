@@ -41,7 +41,10 @@ def validate(raw):
             start=date.fromisoformat(x.get("date", ""))
             if not re.fullmatch(r"\d{4}-\d{2}-\d{2}",x["date"]) or not 2000<=start.year<=2099:raise ValueError()
         except (ValueError,TypeError):raise ValueError("Date must be YYYY-MM-DD, between 2000 and 2099.")
-        event={"id":x["id"],"title":text(x.get("title"),"Event title"),"resource":text(x.get("resource"),"Equipment",60),"date":start.isoformat(),"duration":integer(x.get("duration"),1,14,"Duration days"),"repeat":choice(x.get("repeat"),["once","weekly"],"recurrence"),"count":integer(x.get("count"),1,52,"Occurrences"),"note":text(x.get("note") or "—","Note",1000)}
+        note = x.get("note")
+        if note is None or note == "":
+            note = "—"
+        event={"id":x["id"],"title":text(x.get("title"),"Event title"),"resource":text(x.get("resource"),"Equipment",60),"date":start.isoformat(),"duration":integer(x.get("duration"),1,14,"Duration days"),"repeat":choice(x.get("repeat"),["once","weekly"],"recurrence"),"count":integer(x.get("count"),1,52,"Occurrences"),"note":text(note,"Note",1000)}
         if event["repeat"]=="once":event["count"]=1
         out["events"].append(event)
     return out
